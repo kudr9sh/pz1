@@ -1,0 +1,85 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <conio.h>
+#include <stdio.h>
+
+struct list
+{
+	list *next;
+	char e;
+};
+
+FILE *in, *out;
+
+list *input(list *head)
+{
+	in = fopen("input.txt", "r");
+	list *r = head;
+	head = r;
+	while (feof(in)!= 1)
+	{
+		r->next = new list;
+		r = r->next;
+		fscanf_s(in, "%c", &r->e);
+		r->next = NULL;
+	}
+	fclose(in);
+	return head;
+}
+
+list *output(list *head)
+{
+	out = fopen("output.txt", "w");
+	list *r = head;
+	head = r;
+	while (r->next)
+	{
+		fprintf_s(out, "%c", r->next->e);
+		r = r->next;
+	}
+	fclose(out);
+	return head;
+}
+
+list *reverse(list *head)
+{
+	if (!head) return NULL;
+
+	list *curr = head, *next, *prev = NULL;
+
+	while (curr)
+	{
+		next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;
+	}
+	return prev;
+}
+
+
+int main()
+{
+	list *l = new list, *curr1, *curr;
+	l = input(l);
+	l = reverse(l);
+	curr = l;
+	char sym;
+	while (curr) 
+	{
+		curr1 = curr;
+		sym = curr->e;
+		while (curr1)
+		{
+			if (sym == curr1->next->e)
+				del(curr1->next->e);
+			curr1 = curr1->next;
+		}
+		
+		curr = r->next;
+	}
+
+
+	l = reverse(l);
+	l = output(l);
+	return 0;
+}
