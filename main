@@ -13,15 +13,18 @@ FILE *in, *out;
 list *input(list *head)
 {
 	in = fopen("input.txt", "r");
+	head = new list;
 	list *r = head;
-	head = r;
-	while (feof(in)!= 1)
+	r->e = NULL;
+	while (feof(in) == 0)
+
 	{
 		r->next = new list;
 		r = r->next;
 		fscanf_s(in, "%c", &r->e);
 		r->next = NULL;
 	}
+	
 	fclose(in);
 	return head;
 }
@@ -29,11 +32,10 @@ list *input(list *head)
 list *output(list *head)
 {
 	out = fopen("output.txt", "w");
-	list *r = head;
-	head = r;
-	while (r->next)
+	list *r = head->next;
+	while (r)
 	{
-		fprintf_s(out, "%c", r->next->e);
+		fprintf_s(out, "%c", r->e);
 		r = r->next;
 	}
 	fclose(out);
@@ -59,10 +61,10 @@ list *reverse(list *head)
 
 int main()
 {
-	list *l = new list, *curr1, *curr;
+	list *l, *curr1, *curr, *check;
+	l = NULL;
 	l = input(l);
-	l = reverse(l);
-	curr = l;
+	/*curr = l;
 	char sym;
 	while (curr) 
 	{
@@ -70,16 +72,18 @@ int main()
 		sym = curr->e;
 		while (curr1)
 		{
-			if (sym == curr1->next->e)
-				del(curr1->next->e);
+			if (sym == curr1->e) 
+			{
+				curr1 = Delete_Item_Single_List(curr1);
+
+				
+			}
 			curr1 = curr1->next;
 		}
 		
-		curr = r->next;
+		curr = curr->next;
 	}
-
-
-	l = reverse(l);
+	*/
 	l = output(l);
 	return 0;
 }
