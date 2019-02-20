@@ -2,53 +2,45 @@
 #include <conio.h>
 #include <stdio.h>
 
-struct list
+struct ListNode
 {
-	list *next;
+	ListNode *next;
 	char e;
 };
 
-FILE *in, *out;
 
-list *input(list *head)
+
+ListNode *input(FILE *in)
 {
-	in = fopen("input.txt", "r");
-	head = new list;
-	list *r = head;
-	r->e = NULL;
-	while (feof(in) == 0)
-
+	ListNode *head = new ListNode;
+	ListNode *r = head;
+	while (!feof(in))
 	{
-		r->next = new list;
+		r->next = new ListNode;
 		r = r->next;
 		fscanf_s(in, "%c", &r->e);
 		r->next = NULL;
 	}
-	
-	fclose(in);
 	return head;
 }
 
-list *output(list *head)
+void output(ListNode *head, FILE *out)
 {
-	out = fopen("output.txt", "w");
-	list *r = head->next;
+	ListNode *r = head->next;
 	while (r)
 	{
 		fprintf_s(out, "%c", r->e);
 		r = r->next;
 	}
-	fclose(out);
-	return head;
 }
 
-list *reverse(list *head)
+ListNode *reverse(ListNode *head)
 {
 	if (!head) return NULL;
 
-	list *curr = head, *next, *prev = NULL;
+	ListNode *curr = head, *next, *prev = NULL;
 
-	while (curr)
+	while (curr != NULL)
 	{
 		next = curr->next;
 		curr->next = prev;
@@ -59,31 +51,44 @@ list *reverse(list *head)
 }
 
 
+void del(ListNode *prev) {
+	if (prev == NULL || prev->next == NULL) return;
+	ListNode *del = prev->next;
+	prev->next = prev->next->next;
+	delete del;
+}
+
 int main()
 {
-	list *l, *curr1, *curr, *check;
-	l = NULL;
-	l = input(l);
-	/*curr = l;
-	char sym;
-	while (curr) 
-	{
-		curr1 = curr;
-		sym = curr->e;
-		while (curr1)
-		{
-			if (sym == curr1->e) 
-			{
-				curr1 = Delete_Item_Single_List(curr1);
+	FILE *in, *out;
+	ListNode *head,*curr;
 
-				
-			}
-			curr1 = curr1->next;
+	in = fopen("input.txt", "r");
+	head = input(in);
+	fclose(in);
+
+	if (head->next == NULL || head->next->next == NULL)
+		return 0;
+	head = reverse(head);
+	curr = head->next;
+	while (curr != NULL)
+	{
+		char s = curr->e;
+		ListNode * p = curr;
+		while (p != NULL)
+		{
+			while (p->next != NULL && p->next->e == s)
+				del(p);
+
+			p = p->next;
 		}
-		
 		curr = curr->next;
 	}
-	*/
-	l = output(l);
+	head = reverse(head);
+
+	out = fopen("output.txt", "w");
+	output(head, out);
+	fclose(out);
+
 	return 0;
 }
